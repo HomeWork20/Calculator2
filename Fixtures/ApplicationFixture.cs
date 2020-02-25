@@ -8,29 +8,13 @@ namespace Calculator2.Fixtures
     public class ApplicationFixture : IDisposable
     {
         public IWebDriver Driver { get; private set; }
-        IWebElement Window { get; set; }
-        IWebElement MenuBar { get; set; }
+        IWebElement Window => Driver.FindElement(By.ClassName("CalcFrame"));
 
         public ApplicationFixture()
         {
             var dc = new DesiredCapabilities();
             dc.SetCapability("app", @"C:/windows/system32/calc.exe");
             Driver = new RemoteWebDriver(new Uri("http://localhost:9999"), dc);
-            InitElements();
-        }
-
-        private void InitElements()
-        {
-            try
-            {
-                Window = Driver.FindElement(By.ClassName("CalcFrame"));
-                MenuBar = Window.FindElement(By.Id("MenuBar"));
-            }
-            catch (Exception e)
-            {
-                Driver.Quit();
-                throw e;
-            }
         }
 
         public EventFiringNavigation Navigate()
@@ -47,17 +31,17 @@ namespace Calculator2.Fixtures
 
     public class EventFiringNavigation
     {
-        private IWebElement MenuBar { get; set; }
+        private IWebElement Window { get; set; }
 
-        public EventFiringNavigation(IWebElement menuBar)
+        public EventFiringNavigation(IWebElement window)
         {
-            MenuBar = menuBar;
+            Window = window;
         }
 
         public void GoToUrl(string url)
         {
             string[] items = url.Split('/');
-            IWebElement currentItem = MenuBar;
+            IWebElement currentItem = Window.FindElement(By.Id("MenuBar"));;
             foreach (var item in items)
             {
                 currentItem = currentItem.FindElement(By.Name(item));
