@@ -21,7 +21,7 @@ namespace Calculator2.Tests
             AppFixture.Navigate().GoToUrl(MainPage.URL);
             MainPage mainPage = new MainPage(AppFixture.Driver);
 
-            double number = Math.Round(new Random().NextDouble() * 99 + 1, 2);
+            double number = new Random().Next(1, 100);
             mainPage.TypeNumber(number);
             mainPage.ButtonSqrt.Click();
             mainPage.ButtonEqually.Click();
